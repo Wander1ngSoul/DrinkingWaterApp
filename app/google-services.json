@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "328488888237",
+    "project_id": "drinkingwaterapp-5cecf",
+    "storage_bucket": "drinkingwaterapp-5cecf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328488888237:android:74bd813ebe06d638b4e324",
+        "android_client_info": {
+          "package_name": "com.example.drinkingwaterapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-K5_WEp2HjUoIe-dKfQc2Y3RtBpRIoDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
