@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String registerLogin = loginEditText.getText().toString();
                 String registerPassword = passwordEditText.getText().toString();
-                // Здесь можно добавить логику авторизации
             }
         });
 
