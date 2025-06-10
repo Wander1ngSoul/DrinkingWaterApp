@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // Скрыть кнопку назад
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
         mDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
 
