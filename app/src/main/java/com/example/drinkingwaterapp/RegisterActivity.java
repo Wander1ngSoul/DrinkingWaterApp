@@ -61,6 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
+
     private boolean validateInputs() {
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();

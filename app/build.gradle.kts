@@ -50,6 +50,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
+    // implementation("com.sun.mail:android-mail:1.6.6")
+    // implementation("com.sun.mail:android-activation:1.6.6")
 
 
 

@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -14,9 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class UpdatePasswordActivity extends AppCompatActivity {
 
     private TextInputEditText newPasswordEditText, confirmPasswordEditText;
-    private Button updatePasswordButton;
     private DatabaseReference mDatabase;
-    private Toolbar toolbar;
     private String userId;
 
     @Override
@@ -25,17 +22,13 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_password);
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-
-        // Получаем данные из Intent
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
-        String email = intent.getStringExtra("email");
+        userId = getIntent().getStringExtra("userId");
 
         newPasswordEditText = findViewById(R.id.newPasswordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
-        updatePasswordButton = findViewById(R.id.updatePasswordButton);
+        Button updatePasswordButton = findViewById(R.id.updatePasswordButton);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Смена пароля");
@@ -49,7 +42,7 @@ public class UpdatePasswordActivity extends AppCompatActivity {
             String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
             if (validatePasswords(newPassword, confirmPassword)) {
-                updatePasswordInDatabase(userId, newPassword);
+                updatePasswordInDatabase(newPassword);
             }
         });
     }
@@ -78,13 +71,13 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         return true;
     }
 
-    private void updatePasswordInDatabase(String userId, String newPassword) {
+    private void updatePasswordInDatabase(String newPassword) {
         mDatabase.child(userId).child("password").setValue(newPassword)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, LoginActivity.class));
-                        finish();
+                        finishAffinity();
                     } else {
                         Toast.makeText(this, "Ошибка при изменении пароля", Toast.LENGTH_SHORT).show();
                     }
