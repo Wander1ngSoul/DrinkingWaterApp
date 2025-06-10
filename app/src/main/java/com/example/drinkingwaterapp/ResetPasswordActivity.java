@@ -8,13 +8,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText emailEditText;
     private Button sendCodeButton;
-    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private Toolbar toolbar;
 
     @Override
@@ -22,8 +27,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-
-        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
 
         emailEditText = findViewById(R.id.emailEditText);
         sendCodeButton = findViewById(R.id.sendResetLinkButton);
@@ -32,9 +36,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Восстановление пароля");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // Кнопка "назад"
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -46,28 +49,41 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            mAuth.fetchSignInMethodsForEmail(userEmail)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful() && task.getResult() != null
-                                && !task.getResult().getSignInMethods().isEmpty()) {
-                            sendPasswordResetEmail(userEmail);
-                        } else {
-                            Toast.makeText(this, "Пользователь не найден", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            // Проверяем существование пользователя в базе данных
+            checkUserExists(userEmail);
         });
     }
 
-    private void sendPasswordResetEmail(String email) {
-        mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(this, "Ссылка для сброса отправлена", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(this, LoginActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Ошибка: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+    private void checkUserExists(String email) {
+        Query query = mDatabase.orderByChild("email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Пользователь найден, переходим к смене пароля
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String userId = snapshot.getKey();
+                        goToUpdatePasswordActivity(userId, email);
                     }
-                });
+                } else {
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "Пользователь с таким email не найден", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ResetPasswordActivity.this,
+                        "Ошибка базы данных: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void goToUpdatePasswordActivity(String userId, String email) {
+        Intent intent = new Intent(this, UpdatePasswordActivity.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("email", email);
+        startActivity(intent);
+        finish();
     }
 }
