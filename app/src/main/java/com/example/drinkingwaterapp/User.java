@@ -12,14 +12,12 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String patronymic,
-                String email, String phone, String password, String id) {
+    public User(String firstName, String lastName, String patronymic, String email, String phone, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.id = id;
     }
 }

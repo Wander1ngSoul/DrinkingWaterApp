@@ -8,6 +8,19 @@
     android:background="@color/white"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_color"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        app:title="Главная"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="200dp"
@@ -17,7 +30,7 @@
         app:layout_constraintBottom_toTopOf="@+id/welcomeText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
